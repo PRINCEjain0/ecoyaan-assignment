@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { CheckoutHeader } from "@/components/CheckoutHeader";
 import { useCheckoutStore } from "@/lib/store/checkoutStore";
 
 export function PaymentPageClient() {
@@ -9,16 +10,14 @@ export function PaymentPageClient() {
   const { cart, shippingAddress, clearCheckout } = useCheckoutStore();
   const [isPaying, setIsPaying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     if (!cart || !shippingAddress) {
-      setIsRedirecting(true);
       router.replace("/cart");
     }
   }, [cart, shippingAddress, router]);
 
-  if (!cart || !shippingAddress || isRedirecting) {
+  if (!cart || !shippingAddress) {
     return null;
   }
 
@@ -39,8 +38,10 @@ export function PaymentPageClient() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-zinc-50 py-8 px-4">
-        <div className="mx-auto w-full max-w-xl rounded-2xl bg-white p-8 text-center shadow-sm">
+      <div className="min-h-screen bg-zinc-50">
+        <CheckoutHeader currentStep="payment" />
+        <main className="mx-auto w-full max-w-3xl px-4 py-12 md:px-0">
+          <div className="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-emerald-50">
           <h1 className="mb-2 text-2xl font-semibold text-emerald-700">
             Order successful!
           </h1>
@@ -57,15 +58,17 @@ export function PaymentPageClient() {
           >
             Back to cart
           </button>
-        </div>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-8 px-4">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 md:flex-row">
-        <section className="flex-1 rounded-2xl bg-white p-6 shadow-sm">
+    <div className="min-h-screen bg-zinc-50">
+      <CheckoutHeader currentStep="payment" />
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 md:flex-row md:px-0">
+        <section className="flex-1 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h1 className="mb-4 text-2xl font-semibold text-zinc-900">
             Review & pay
           </h1>
@@ -93,7 +96,7 @@ export function PaymentPageClient() {
           </button>
         </section>
 
-        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm">
+        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h2 className="mb-3 text-lg font-semibold text-zinc-900">
             Order summary
           </h2>
@@ -136,7 +139,7 @@ export function PaymentPageClient() {
             </div>
           </dl>
         </aside>
-      </div>
+      </main>
     </div>
   );
 }

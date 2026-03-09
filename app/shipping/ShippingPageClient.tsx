@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CheckoutHeader } from "@/components/CheckoutHeader";
 import { useCheckoutStore } from "@/lib/store/checkoutStore";
 
 const shippingSchema = z.object({
@@ -62,9 +63,10 @@ export function ShippingPageClient() {
   const total = subtotal + shipping - (cart?.discount_applied ?? 0);
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-8 px-4">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 md:flex-row">
-        <div className="flex-1 rounded-2xl bg-white p-6 shadow-sm">
+    <div className="min-h-screen bg-zinc-50">
+      <CheckoutHeader currentStep="shipping" />
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 md:flex-row md:px-0">
+        <div className="flex-1 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h1 className="mb-1 text-2xl font-semibold text-zinc-900">
             Shipping address
           </h1>
@@ -182,7 +184,7 @@ export function ShippingPageClient() {
           </form>
         </div>
 
-        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm">
+        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h2 className="mb-3 text-lg font-semibold text-zinc-900">
             Order summary
           </h2>
@@ -233,7 +235,7 @@ export function ShippingPageClient() {
             </p>
           )}
         </aside>
-      </div>
+      </main>
     </div>
   );
 }

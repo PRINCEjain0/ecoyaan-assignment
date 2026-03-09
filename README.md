@@ -34,6 +34,7 @@ The flow guides a user from reviewing their cart to entering a shipping address,
   - “Pay securely” simulates a payment.
   - On success, renders an **“Order successful!”** state with a button back to the cart.
 
+
 ### Running the project locally
 
 ```bash

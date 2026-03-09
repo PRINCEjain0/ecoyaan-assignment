@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { CheckoutHeader } from "@/components/CheckoutHeader";
 import { useCheckoutStore } from "@/lib/store/checkoutStore";
 import type { CartResponse } from "@/lib/types";
 
@@ -27,9 +28,10 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
   const total = subtotal + shipping - effectiveCart.discount_applied;
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-8 px-4">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 md:flex-row">
-        <section className="flex-1 rounded-2xl bg-white p-6 shadow-sm">
+    <div className="min-h-screen bg-zinc-50">
+      <CheckoutHeader currentStep="cart" />
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 md:flex-row md:px-0">
+        <section className="flex-1 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h1 className="mb-4 text-2xl font-semibold text-zinc-900">
             Cart summary
           </h1>
@@ -37,14 +39,14 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
             {effectiveCart.cartItems.map((item) => (
               <div
                 key={item.product_id}
-                className="flex items-center gap-4 rounded-xl border border-zinc-100 p-3"
+                className="flex items-center gap-5 rounded-xl border border-zinc-100 p-4"
               >
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-zinc-100 md:h-28 md:w-28">
                   <Image
                     src={item.image}
                     alt={item.product_name}
                     fill
-                    sizes="64px"
+                    sizes="(min-width: 768px) 112px, 96px"
                     className="object-cover"
                   />
                 </div>
@@ -64,7 +66,7 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
           </div>
         </section>
 
-        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm">
+        <aside className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm ring-1 ring-emerald-50">
           <h2 className="mb-4 text-lg font-semibold text-zinc-900">
             Order summary
           </h2>
@@ -96,7 +98,7 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
             Proceed to checkout
           </Link>
         </aside>
-      </div>
+      </main>
     </div>
   );
 }
