@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCheckoutStore } from "@/lib/store/checkoutStore";
@@ -45,6 +46,12 @@ export function ShippingPageClient() {
     setShippingAddress(values);
     router.push("/payment");
   };
+
+  useEffect(() => {
+    if (!cart) {
+      router.replace("/cart");
+    }
+  }, [cart, router]);
 
   const subtotal =
     cart?.cartItems.reduce(

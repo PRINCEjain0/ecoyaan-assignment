@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/lib/store/checkoutStore";
 
@@ -9,9 +9,16 @@ export function PaymentPageClient() {
   const { cart, shippingAddress, clearCheckout } = useCheckoutStore();
   const [isPaying, setIsPaying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  if (!cart || !shippingAddress) {
-    router.replace("/cart");
+  useEffect(() => {
+    if (!cart || !shippingAddress) {
+      setIsRedirecting(true);
+      router.replace("/cart");
+    }
+  }, [cart, shippingAddress, router]);
+
+  if (!cart || !shippingAddress || isRedirecting) {
     return null;
   }
 
@@ -25,7 +32,6 @@ export function PaymentPageClient() {
   const handlePay = () => {
     setIsPaying(true);
     setTimeout(() => {
-      clearCheckout();
       setIsSuccess(true);
       setIsPaying(false);
     }, 1000);
@@ -43,7 +49,10 @@ export function PaymentPageClient() {
           </p>
           <button
             type="button"
-            onClick={() => router.push("/cart")}
+            onClick={() => {
+              clearCheckout();
+              router.push("/cart");
+            }}
             className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
           >
             Back to cart

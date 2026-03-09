@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Ecoyaan Checkout Flow (Frontend Assignment)
 
-## Getting Started
+This repository implements a simplified Ecoyaan-style checkout experience using **Next.js App Router**, **Zustand** for shared state, and **React Hook Form + Zod** for form handling and validation.
 
-First, run the development server:
+The flow guides a user from reviewing their cart to entering a shipping address, confirming the order, and finally seeing an **“Order successful!”** success screen after a simulated payment.
+
+### Tech stack
+
+- **Next.js 16 (App Router)** with Server Components
+- **TypeScript**
+- **Zustand** for global checkout state (cart + shipping address)
+- **React Hook Form + Zod** for type-safe, validated forms
+- **Tailwind CSS** for styling
+
+### Pages / flow
+
+- `/cart` – **Cart / order summary**
+  - Uses an async server function (`getCart`) to fetch mock cart data during SSR.
+  - Renders cart items, subtotal, shipping, and total.
+  - Hydrates the cart into the Zustand `useCheckoutStore`.
+  - “Proceed to checkout” navigates to `/shipping`.
+
+- `/shipping` – **Shipping address**
+  - `"use client"` page using **React Hook Form + Zod**.
+  - Fields: full name, email, phone (10 digits), PIN code (6 digits), city, state.
+  - Shows inline validation messages for invalid/empty fields.
+  - Displays a compact **order summary sidebar** using data from the Zustand cart.
+  - If there is no cart in state (direct access / refresh), redirects back to `/cart`.
+  - On submit, saves the shipping address into Zustand and navigates to `/payment`.
+
+- `/payment` – **Payment / confirmation + success**
+  - Reads cart + shipping address from Zustand.
+  - Shows a full order summary and the chosen shipping address.
+  - “Pay securely” simulates a payment.
+  - On success, renders an **“Order successful!”** state with a button back to the cart.
+
+### Running the project locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open `http://localhost:3000/cart` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### State management
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The shared checkout state lives in `lib/store/checkoutStore.ts`:
 
-## Learn More
+- `cart`: server-fetched cart data (items, shipping fee, discount).
+- `shippingAddress`: values captured from the shipping form.
+- `setCart`, `setShippingAddress`, `clearCheckout`: helper actions for the flow.
 
-To learn more about Next.js, take a look at the following resources:
+### Form validation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The shipping form uses a Zod schema to validate:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Non-empty full name, city, and state.
+- Valid email format.
+- 10-digit numeric phone number.
+- 6-digit numeric PIN code.
 
-## Deploy on Vercel
+The schema is wired into React Hook Form via `zodResolver`, so errors are displayed inline under each field.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
