@@ -90,7 +90,6 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
               <dd>₹{total}</dd>
             </div>
           </dl>
-
           <Link
             href="/shipping"
             className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"

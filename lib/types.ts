@@ -13,6 +13,7 @@ export type CartResponse = {
 };
 
 export type ShippingAddress = {
+  id: string;
   fullName: string;
   email: string;
   phone: string;
